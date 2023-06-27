@@ -16,19 +16,15 @@ public class Server2 {
     static Vector<Integer> requestUserId = new Vector<>();
     static Vector<Integer> rands = new Vector<>();
 
-    public static boolean receiveFile(String fileName, String fileType,int fileLength,int userID,DataInputStream disFile,
+    public static boolean receiveFile(String filePath, String fileName, String fileType,int fileLength,int userID,DataInputStream disFile,
                                       DataOutputStream dosFile,int CHUNK_SIZE) throws IOException {
 
         int bytes = 0;
-        FileOutputStream fos =
-                new FileOutputStream("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                        userID+"/"+fileType+"/"+fileName);
+        FileOutputStream fos = new FileOutputStream(filePath + userID+"/"+fileType+"/"+fileName);
 
         try{
             int size = fileLength;     // read file size
             byte[] buffer = new byte[CHUNK_SIZE];
-            int CHUNK = 0;
-            // extra
             CUR_BUFFER_SIZE += CHUNK_SIZE;
             while (size > 0) {
 
@@ -38,13 +34,11 @@ public class Server2 {
                 }catch (SocketTimeoutException socketTimeoutException){
                     CUR_BUFFER_SIZE -= CHUNK_SIZE;
                     fos.close();
-                    System.out.println("FileOutputStream Closed due to socket timeout");
+                    System.out.println("<S>: FileOutputStream closed due to socket timeout");
                     return false;
                 }
 
                 if(!ok) break;
-
-                CHUNK++;
 
                 fos.write(buffer,0,bytes);
 
@@ -56,24 +50,23 @@ public class Server2 {
 
             CUR_BUFFER_SIZE -= CHUNK_SIZE;
             fos.close();
-            System.out.println("FileOutputStream Closed");
+            System.out.println("<S>: FileOutputStream closed");
 
         }catch (Exception e)
         {
             CUR_BUFFER_SIZE -= CHUNK_SIZE;
             fos.close();
-            System.out.println("FileOutputStream Closed due to an exception");
+            System.out.println("<S>: FileOutputStream closed due to an exception");
         }
 
         // check confirmation and validate file length
         String msg = disFile.readUTF();
         File file =
-                new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                        userID+"/"+fileType+"/"+fileName);
+                new File(filePath + userID+"/"+fileType+"/"+fileName);
         if(msg.equals("ACK")){
             if(file.length() != fileLength)
             {
-                System.out.println("File length mismatch");
+                System.out.println("<S>: File length mismatch");
                 file.delete();
                 return false;
             }
@@ -87,29 +80,27 @@ public class Server2 {
         return true;
     }
 
-    public static void sendFile(String fileName, String fileType,int uID,int CHUNK_SIZE,DataOutputStream dataOutputStream,
+    public static void sendFile(String filePath, String fileName, String fileType,int uID,int CHUNK_SIZE,DataOutputStream dos,
                                 String fileID) throws IOException {
 
-        File file =
-                new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                        uID+"/"+fileType+"/"+fileName);
+        File file = new File(filePath + uID+"/"+fileType+"/"+fileName);
         FileInputStream fis = new FileInputStream(file);
 
         try{
             long fileLength = file.length();
 
-            dataOutputStream.writeUTF("file "+ fileLength +" "+fileName+" "+fileType+" "+CHUNK_SIZE+" "+fileID);
-            dataOutputStream.flush();
+            dos.writeUTF("file "+ fileLength +" "+fileName+" "+fileType+" "+CHUNK_SIZE+" "+fileID);
+            dos.flush();
 
             // break file into chunks
             int bytes = 0;
             byte[] buffer = new byte[CHUNK_SIZE];
             int CHUNK = 0;
             while ((bytes=fis.read(buffer))!=-1){
-                if(CHUNK % 1000 == 0) System.out.println("Chunk #"+CHUNK);
+                if(CHUNK % 1000 == 0) System.out.println("Chunk No. " + CHUNK);
                 CHUNK++;
-                dataOutputStream.write(buffer,0,bytes);
-                dataOutputStream.flush();
+                dos.write(buffer,0,bytes);
+                dos.flush();
             }
             fis.close();
 
@@ -135,14 +126,14 @@ public class Server2 {
                 DataOutputStream dosFile = new DataOutputStream(connectionSocketFile.getOutputStream());
 
                 User currUser = new User(connectionSocket.getPort(),dis,dos,disFile,dosFile);
-                System.out.println("Just connected to client with port -> " + connectionSocket.getPort() + ", file : "+
+                System.out.println("<S>: Connected to a client to port - " + connectionSocket.getPort() + ", FileStream port - "+
                         connectionSocketFile.getPort());
 
                 new Worker(dis, dos, disFile, dosFile, currUser).start();
                 new WorkerFile(dis, dos, connectionSocketFile, disFile, dosFile, currUser).start();
             }
         }catch(Exception e) {
-            System.out.println("Cannot connect to server");
+            System.out.println("<S>: Cannot connect to the specified ports");
             System.exit(1);
         }
     }

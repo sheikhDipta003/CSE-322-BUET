@@ -8,6 +8,7 @@ public class User {
 
     int uid;
     int clientSocketID;
+    static String filePath;
     DataInputStream dis;
     DataOutputStream dos;
     DataInputStream disFile;
@@ -26,6 +27,7 @@ public class User {
         this.isOnline = true;
         this.fileCount = 0;
         this.userMessages = new Vector<Message>();
+        filePath = "C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/";
     }
 
     public void getCredentials() throws IOException {
@@ -69,12 +71,10 @@ public class User {
     public static String[] lookupFiles(int uID, String type){
         File dir = null;
         if(type.equalsIgnoreCase("private")){
-            dir = new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                    uID+"/private");
+            dir = new File( filePath + uID+"/private");
         }
         else if(type.equalsIgnoreCase("public")){
-            dir = new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                    uID+"/public");
+            dir = new File(filePath + uID+"/public");
         }
         assert dir != null;
         return dir.list();

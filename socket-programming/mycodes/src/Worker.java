@@ -18,7 +18,7 @@ public class Worker extends Thread{
 
     @Override
     public void run(){
-        System.out.println("Server started");
+        System.out.println("<S>: Server started");
 
         try {
             currUser.getCredentials();
