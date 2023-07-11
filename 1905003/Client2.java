@@ -4,9 +4,9 @@ import java.net.SocketTimeoutException;
 
 public class Client2 {
 
-    public static void sendFile(String fileName, String fileType, int CHUNK_SIZE,DataInputStream disFile,DataOutputStream dosFile) throws IOException {
+    public static void sendFile(String filePath, String fileName, String fileType, int CHUNK_SIZE,DataInputStream disFile,DataOutputStream dosFile) throws IOException {
 
-        File file = new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/clientfile/"+fileName);
+        File file = new File(filePath+"clientfile/"+fileName);
         FileInputStream fis = new FileInputStream(file);
 
         long fileLength = file.length();
@@ -24,12 +24,12 @@ public class Client2 {
                 String msg = disFile.readUTF();
                 if(!msg.equals("ACK"))
                 {
-                    System.out.println("No ACK");
+                    System.out.println("<S>: No ACK");
                     break;
                 }
 
             }catch (SocketTimeoutException socketTimeoutException){
-                System.out.println("timeout");
+                System.out.println("<C>: timeout");
                 dosFile.writeUTF("timeout "+fileName + " " + fileType);
                 dosFile.flush();
                 fis.close();
@@ -42,15 +42,15 @@ public class Client2 {
         dosFile.flush();
 
         String msg = disFile.readUTF();
-        if(msg.equals("ACK")) System.out.println("File uploaded");
-        else System.out.println("Upload failed");
+        if(msg.equals("ACK")) System.out.println("<S>: File uploaded");
+        else System.out.println("<S>: Upload failed");
 
     }
 
-    public static void receiveFile(String fileName, String fileType,int fileLength,DataInputStream dataInputStream,int CHUNK_SIZE,String fileId) throws IOException {
+    public static void receiveFile(String filePath, String fileName, String fileType,int fileLength,DataInputStream dataInputStream,int CHUNK_SIZE,String fileId) throws IOException {
 
         int bytes = 0;
-        FileOutputStream fos = new FileOutputStream("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/clientfile/"+fileType+"_"+fileId+"_"+fileName);
+        FileOutputStream fos = new FileOutputStream(filePath+"clientfile/"+fileType+"_"+fileId+"_"+fileName);
 
         int size = fileLength;     // read file size
         byte[] buffer = new byte[CHUNK_SIZE];
@@ -75,7 +75,7 @@ public class Client2 {
             new ClientWorker(dis,dos,disFile,dosFile).start();
             new ClientWorkerFile(dis,dos,clientSocketFile,disFile,dosFile).start();
         }catch(Exception e) {
-            System.out.println("Cannot connect to server");
+            System.out.println("<C>: Cannot connect to server");
             System.exit(1);
         }
     }

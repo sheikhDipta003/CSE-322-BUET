@@ -8,6 +8,7 @@ import java.util.Vector;
 
 public class WorkerFile extends Thread{
     User currUser;
+    String filePath;
     DataInputStream dis;
     DataOutputStream dos;
     Socket connectionSocketFile;
@@ -19,6 +20,7 @@ public class WorkerFile extends Thread{
         this.connectionSocketFile=connectionSocketFile;
         this.disFile=disFile; this.dosFile=dosFile;
         this.currUser = currUser;
+        filePath = "C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/";
     }
 
     @Override
@@ -44,7 +46,7 @@ public class WorkerFile extends Thread{
                     String fileType = tokens.elementAt(2);
 
                     currUser.writeToStream("starting download",'c');
-                    Server2.sendFile(fileName,fileType,currUser.uid,Server2.MAX_CHUNK_SIZE * 1024,
+                    Server2.sendFile(filePath, fileName,fileType,currUser.uid,Server2.MAX_CHUNK_SIZE * 1024,
                             currUser.dosFile,getFileId(currUser));
 
                 }
@@ -57,7 +59,7 @@ public class WorkerFile extends Thread{
                     String fileName = tokens.elementAt(2);
 
                     currUser.writeToStream("starting to download requested file",'c');
-                    Server2.sendFile(fileName,fileType,uID,50, currUser.dosFile,getFileId(currUser));
+                    Server2.sendFile(filePath, fileName,fileType,uID,50, currUser.dosFile,getFileId(currUser));
 
                 }
                 else if(tokens.elementAt(0).equals("up"))
@@ -80,9 +82,7 @@ public class WorkerFile extends Thread{
                         System.out.println("Buffer limit exceeded");
                         currUser.writeToStream("not ok",'c');
 
-                        File file =
-                                new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                                        currUser.uid+"/"+fileType+"/"+fileName);
+                        File file = new File(filePath + currUser.uid+"/"+fileType+"/"+fileName);
                         file.delete();
                         currUser.writeToStream("File deleted",'c');
                     }
@@ -111,18 +111,14 @@ public class WorkerFile extends Thread{
                             System.out.println("Buffer limit exceeded");
                             currUser.writeToStream("not ok",'c');
 
-                            File file =
-                                    new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                                            currUser.uid+"/"+fileType+"/"+fileName);
+                            File file = new File(filePath + currUser.uid+"/"+fileType+"/"+fileName);
                             file.delete();
                             currUser.writeToStream("File Deleted",'c');
                         }
 
-                        int userWhoRequested = Server2.requestUserId.get(requestId);
-
-                        String message = "requested file uploaded with reqid : "+requestId;
-
-                        User.sendMessage(currUser.uid,userWhoRequested,message);
+                        int requesterID = Server2.requestUserId.get(requestId);
+                        String message = "Requested file uploaded with request-id : " + requestId;
+                        User.sendMessage(currUser.uid,requesterID,message);
                     }
                     else{
                         currUser.writeToStream("Invalid request id",'c');
@@ -139,32 +135,30 @@ public class WorkerFile extends Thread{
                     try
                     {
                         connectionSocketFile.setSoTimeout(30000);
-                        boolean ok = Server2.receiveFile(fileName,fileType,fileLength,currUser.uid,disFile,dosFile,
+                        boolean ok = Server2.receiveFile(filePath, fileName,fileType,fileLength,currUser.uid,disFile,dosFile,
                                 CHUNK_SIZE);
                         connectionSocketFile.setSoTimeout(0);
 
                         if(ok)
                         {
                             currUser.writeToStream("ACK",'f');
-                            System.out.println("upload complete");
+                            System.out.println("<S> (File Stream): upload complete");
                         }
                         else
                         {
-                            File file = new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                                    currUser.uid+"/"+fileType+"/"+fileName);
+                            File file = new File(filePath + currUser.uid+"/"+fileType+"/"+fileName);
                             System.out.println(file.delete());
                             currUser.writeToStream("NOT_ACK",'f');
-                            System.out.println("upload failed");
+                            System.out.println("<S> (File Stream): upload failed");
                         }
 
                     }
                     catch(Exception e)
                     {
-                        File file = new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                                currUser.uid+"/"+fileType+"/"+fileName);
-                        System.out.println(file.delete());
+                        File file = new File(filePath + currUser.uid+"/"+fileType+"/"+fileName);
+                        file.delete();
                         currUser.writeToStream("File deleted due to exception",'f');
-                        System.err.println("Could not transfer file");
+                        System.err.println("<S> (File Stream): Could not transfer file due to an exception");
                     }
                 }
                 else if(tokens.elementAt(0).equals("timeout"))
@@ -172,10 +166,8 @@ public class WorkerFile extends Thread{
                     String fileType = tokens.elementAt(1);
                     String fileName = tokens.elementAt(2);
 
-                    File file =
-                            new File("C:/Users/HP/Desktop/3-2-Lab/cse322-Networks/socket-programming/mycodes/files/"+
-                                    currUser.uid+"/"+fileType+"/"+fileName);
-                    System.out.println(file.delete());
+                    File file = new File(filePath + currUser.uid+"/"+fileType+"/"+fileName);
+                    file.delete();
                     currUser.writeToStream("File deleted due to timeout",'f');
                 }
 
@@ -195,11 +187,11 @@ public class WorkerFile extends Thread{
 
     public String getFileId(User u)
     {
-        int x;
         Random rd = new Random();
-        do{ x = rd.nextInt(); }
-        while(Server2.rands.contains(x));
-
+        int x = rd.nextInt();
+        while(Server2.rands.contains(x)){
+            x = rd.nextInt();
+        }
         Server2.rands.add(x);
 
         return u.uid + "_"+ x;

@@ -93,7 +93,7 @@ public class Worker extends Thread{
                 }
                 else if(tokens.elementAt(0).equals("showpublicfiles"))
                 {
-                    // lookup only the public files of a specific student: c <user-id>
+                    // lookup only the public files of a specific student: showpublicfiles <user-id>
                     int userID = Integer.parseInt(tokens.elementAt(1));
 
                     if(User.isAuthUser(userID))
@@ -114,7 +114,7 @@ public class Worker extends Thread{
                 }
                 else if(tokens.elementAt(0).equals("reqfile"))
                 {
-                    // request for a file : d <space separated description of file>
+                    // request for a file : reqfile <space separated description of file>
                     StringBuilder description = new StringBuilder();
                     for(int i=1;i<tokens.size();i++) description.append(tokens.elementAt(i));
 

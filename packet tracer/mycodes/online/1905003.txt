@@ -1,0 +1,95 @@
+Tasks:
+1. assign ip to all devices so that communication between any 2 devices is possible
+2. Router0 should be password protected
+3. Configure Router3 so that
+	- any packet from PC0 to PC1 passes through Router1 and avoids Router2
+	- any packet from PC0 to PC2 passes through Router2 and avoids Router1
+4. you are allowed to use static routing in at most one router
+
+===========R0
+en
+conf t
+line console 0
+password cisco
+login
+enable secret class
+int fa0/0
+ip address 192.168.10.101 255.255.255.0
+no shutdown
+conf t
+ip route 192.168.20.0 255.255.255.0 fa0/0
+ip route 192.168.30.0 255.255.255.0 fa0/0
+ip route 192.168.40.0 255.255.255.0 fa0/0
+ip route 192.168.50.0 255.255.255.0 fa0/0
+ip route 192.168.60.0 255.255.255.0 fa0/0
+
+==========R1
+int fa0/0
+ip address 192.168.40.101 255.255.255.0
+no shutdown
+int fa4/0
+ip address 192.168.50.101 255.255.255.0
+no shutdown
+conf t
+ip route 192.168.10.0 255.255.255.0 fa0/0
+ip route 192.168.20.0 255.255.255.0 fa4/0
+ip route 192.168.30.0 255.255.255.0 fa4/0
+
+==========R2
+int fa0/0
+ip address 192.168.40.102 255.255.255.0
+no shutdown
+int fa4/0
+ip address 192.168.60.102 255.255.255.0
+no shutdown
+conf t
+ip route 192.168.10.0 255.255.255.0 fa0/0
+ip route 192.168.20.0 255.255.255.0 fa4/0
+ip route 192.168.30.0 255.255.255.0 fa4/0
+
+==========R3
+int fa0/0
+ip address 192.168.20.101 255.255.255.0
+no shutdown
+int fa1/0 
+ip address 192.168.30.101 255.255.255.0
+no shutdown
+int fa4/0
+ip address 192.168.50.102 255.255.255.0
+no shutdown
+int fa5/0
+ip address 192.168.60.101 255.255.255.0
+no shutdown
+conf t
+ip route 192.168.10.0 255.255.255.0 fa4/0
+ip route 192.168.40.0 255.255.255.0 fa4/0
+
+
+==========Switch0
+en
+conf t
+int vlan 1
+ip address 192.168.25.101 255.255.255.0
+no shutdown
+
+==========Switch1
+en
+conf t
+int vlan 1
+ip address 192.168.25.102 255.255.255.0
+no shutdown
+
+==============R2
+conf t
+ip access-list extended ACL-R2
+permit icmp any any echo
+int fa0/0
+ip access-group ACL-R2 in
+
+==============R1
+conf t
+ip access-list extended ACL-R1
+deny icmp host 192.168.10.1 host 192.168.20.1 echo
+permit icmp any any echo
+int fa0/0
+ip access-group ACL-R1 in

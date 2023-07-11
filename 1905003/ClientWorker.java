@@ -17,19 +17,17 @@ public class ClientWorker extends Thread{
 
     @Override
     public void run(){
-        // first
         String fromServer = null;
         try {
             fromServer = dis.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Server: " + fromServer);
+        System.out.println("<S>: " + fromServer);
 
         while (true)
         {
-            Scanner sc = new Scanner(System.in);
-            String reply = sc.nextLine();
+            String reply = new Scanner(System.in).nextLine();
             StringTokenizer stringTokenizer = new StringTokenizer(reply," ");
             Vector<String> tokens = new Vector<>();
 
@@ -62,7 +60,7 @@ public class ClientWorker extends Thread{
 
             try {
                 fromServer = dis.readUTF();
-                System.out.println("Server: " + fromServer);
+                System.out.println("<S>: " + fromServer);
 
             } catch (IOException e) {
                 e.printStackTrace();
