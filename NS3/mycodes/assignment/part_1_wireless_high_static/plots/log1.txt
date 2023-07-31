@@ -40,220 +40,140 @@ Connections :
 Src Addr10.1.2.2 -- Dst Addr 10.1.3.2
 Sent Packets = 74
 Received Packets = 61
-Lost Packets = 11
 Packet delivery ratio = 82.4324%
-Packet loss ratio = 14.8649%
-Packet lost diff way = 11
-Delay = +1.84232e+09ns
 Throughput = 18.8421Kbps
  
 ----Flow ID:2
 Src Addr10.1.2.3 -- Dst Addr 10.1.3.3
 Sent Packets = 85
 Received Packets = 64
-Lost Packets = 20
 Packet delivery ratio = 75.2941%
-Packet loss ratio = 23.5294%
-Packet lost diff way = 20
-Delay = +1.8933e+09ns
 Throughput = 19.7985Kbps
  
 ----Flow ID:3
 Src Addr10.1.2.4 -- Dst Addr 10.1.3.4
 Sent Packets = 71
 Received Packets = 55
-Lost Packets = 14
 Packet delivery ratio = 77.4648%
-Packet loss ratio = 19.7183%
-Packet lost diff way = 14
-Delay = +1.75836e+09ns
 Throughput = 16.9292Kbps
  
 ----Flow ID:4
 Src Addr10.1.2.5 -- Dst Addr 10.1.3.5
 Sent Packets = 286
 Received Packets = 216
-Lost Packets = 48
 Packet delivery ratio = 75.5245%
-Packet loss ratio = 16.7832%
-Packet lost diff way = 48
-Delay = +1.94091e+09ns
 Throughput = 68.2584Kbps
  
 ----Flow ID:5
 Src Addr10.1.2.6 -- Dst Addr 10.1.3.6
 Sent Packets = 219
 Received Packets = 157
-Lost Packets = 49
 Packet delivery ratio = 71.6895%
-Packet loss ratio = 22.3744%
-Packet lost diff way = 49
-Delay = +1.94574e+09ns
 Throughput = 49.4483Kbps
  
 ----Flow ID:6
 Src Addr10.1.2.7 -- Dst Addr 10.1.3.7
 Sent Packets = 223
 Received Packets = 165
-Lost Packets = 37
 Packet delivery ratio = 73.991%
-Packet loss ratio = 16.5919%
-Packet lost diff way = 37
-Delay = +2.07178e+09ns
 Throughput = 51.9988Kbps
  
 ----Flow ID:7
 Src Addr10.1.2.8 -- Dst Addr 10.1.3.8
 Sent Packets = 119
 Received Packets = 96
-Lost Packets = 22
 Packet delivery ratio = 80.6723%
-Packet loss ratio = 18.4874%
-Packet lost diff way = 22
-Delay = +1.77298e+09ns
 Throughput = 30.0006Kbps
  
 ----Flow ID:8
 Src Addr10.1.2.9 -- Dst Addr 10.1.3.9
 Sent Packets = 59
 Received Packets = 44
-Lost Packets = 13
 Packet delivery ratio = 74.5763%
-Packet loss ratio = 22.0339%
-Packet lost diff way = 13
-Delay = +1.8701e+09ns
 Throughput = 13.4222Kbps
  
 ----Flow ID:9
 Src Addr10.1.2.10 -- Dst Addr 10.1.3.10
 Sent Packets = 225
 Received Packets = 168
-Lost Packets = 44
 Packet delivery ratio = 74.6667%
-Packet loss ratio = 19.5556%
-Packet lost diff way = 44
-Delay = +1.91257e+09ns
 Throughput = 52.9553Kbps
  
 ----Flow ID:10
 Src Addr10.1.2.11 -- Dst Addr 10.1.3.11
 Sent Packets = 99
 Received Packets = 80
-Lost Packets = 11
 Packet delivery ratio = 80.8081%
-Packet loss ratio = 11.1111%
-Packet lost diff way = 11
-Delay = +1.75052e+09ns
 Throughput = 24.8996Kbps
  
 ----Flow ID:11
 Src Addr10.1.3.10 -- Dst Addr 10.1.2.10
 Sent Packets = 162
 Received Packets = 162
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.52176e+06ns
 Throughput = 2.87407Kbps
  
 ----Flow ID:12
 Src Addr10.1.3.11 -- Dst Addr 10.1.2.11
 Sent Packets = 65
 Received Packets = 65
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.60604e+06ns
 Throughput = 1.14489Kbps
  
 ----Flow ID:13
 Src Addr10.1.3.8 -- Dst Addr 10.1.2.8
 Sent Packets = 81
 Received Packets = 81
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.47364e+06ns
 Throughput = 1.33689Kbps
  
 ----Flow ID:14
 Src Addr10.1.3.5 -- Dst Addr 10.1.2.5
 Sent Packets = 185
 Received Packets = 184
-Lost Packets = 0
 Packet delivery ratio = 99.4595%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.5164e+06ns
 Throughput = 3.36711Kbps
  
 ----Flow ID:15
 Src Addr10.1.3.6 -- Dst Addr 10.1.2.6
 Sent Packets = 150
 Received Packets = 150
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.58307e+06ns
 Throughput = 2.81244Kbps
  
 ----Flow ID:16
 Src Addr10.1.3.9 -- Dst Addr 10.1.2.9
 Sent Packets = 43
 Received Packets = 43
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.73269e+06ns
 Throughput = 0.696889Kbps
  
 ----Flow ID:17
 Src Addr10.1.3.3 -- Dst Addr 10.1.2.3
 Sent Packets = 63
 Received Packets = 63
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.54854e+06ns
 Throughput = 1.00741Kbps
  
 ----Flow ID:18
 Src Addr10.1.3.4 -- Dst Addr 10.1.2.4
 Sent Packets = 52
 Received Packets = 52
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.46732e+06ns
 Throughput = 0.833185Kbps
  
 ----Flow ID:19
 Src Addr10.1.3.2 -- Dst Addr 10.1.2.2
 Sent Packets = 58
 Received Packets = 58
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.50614e+06ns
 Throughput = 0.928Kbps
  
 ----Flow ID:20
 Src Addr10.1.3.7 -- Dst Addr 10.1.2.7
 Sent Packets = 145
 Received Packets = 145
-Lost Packets = 0
 Packet delivery ratio = 100%
-Packet loss ratio = 0%
-Packet lost diff way = 0
-Delay = +3.53208e+06ns
 Throughput = 2.77096Kbps
  
 
@@ -261,12 +181,9 @@ Throughput = 2.77096Kbps
 
 Total sent packets  = 2464
 Total Received Packets = 2109
-Total Lost Packets = 269
 METRICS >> 
 Average Throughput = 364.325Kbps
-End to End Delay = +1.00247e+09ns
 Packet Delivery Ratio = 85.5925%
-Packet Drop Ratio = 10.9172%
 Total Flows 20
 #######################################################################
 

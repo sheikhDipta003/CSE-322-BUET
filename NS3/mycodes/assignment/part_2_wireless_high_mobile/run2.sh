@@ -9,9 +9,7 @@ plot_all()
     # args [starting from 1, AFTER $gnu_file] :
     # 1 -> output-file-name, 2 -> plot-title, 3 -> xlabel, 4 -> ylabel, 5 -> path-to-the-data-file, 6 -> x-data-col, 7 -> y-data-col
     gnuplot -c $gnu_file "$1/throughput_$2.png" "throughput vs $2" "$2" "throughput (Kbps)" "$3" "$4" 5
-    gnuplot -c $gnu_file "$1/delay_$2.png" "delay vs $2" "$2" "delay (ns)" "$3" "$4" 6
-    gnuplot -c $gnu_file "$1/delivery_ratio_$2.png" "delivery ratio vs $2" "$2" "delivery ratio" "$3" "$4" 7
-    gnuplot -c $gnu_file "$1/drop_ratio_$2.png" "drop ratio vs $2" "$2" "drop ratio" "$3" "$4" 8
+    gnuplot -c $gnu_file "$1/delivery_ratio_$2.png" "delivery ratio vs $2" "$2" "delivery ratio" "$3" "$4" 6
 }
 
 # ################ TASK A PART 2

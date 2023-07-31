@@ -394,11 +394,9 @@ main(int argc, char *argv[])
 
   // variables for output measurement
   float AvgThroughput = 0;
-  Time Delay;
   uint32_t SentPackets = 0;
   uint32_t ReceivedPackets = 0;
   uint32_t ReceivedBytes = 0;
-  uint32_t LostPackets = 0;
 
   std::ofstream MyFile(file, std::ios_base::app);
 
@@ -414,41 +412,30 @@ main(int argc, char *argv[])
     NS_LOG_UNCOND("Src Addr" <<t.sourceAddress << " -- Dst Addr "<< t.destinationAddress);
     NS_LOG_UNCOND("Sent Packets = " <<iter->second.txPackets);
     NS_LOG_UNCOND("Received Packets = " <<iter->second.rxPackets);
-    NS_LOG_UNCOND("Lost Packets = " <<iter->second.lostPackets);
     NS_LOG_UNCOND("Packet delivery ratio = " <<iter->second.rxPackets*100.0/iter->second.txPackets << "%");
-    NS_LOG_UNCOND("Packet loss ratio = " << (iter->second.lostPackets)*100.0/iter->second.txPackets << "%");
-    NS_LOG_UNCOND("Packet lost diff way = "<< iter->second.lostPackets);
-    if(iter->second.rxPackets != 0) NS_LOG_UNCOND("Delay = " <<iter->second.delaySum / iter->second.rxPackets);
-    // NS_LOG_UNCOND("Throughput = " <<iter->second.rxBytes * 8.0/(iter->second.timeLastRxPacket.GetSeconds()-iter->second.timeFirstTxPacket.GetSeconds())/1024<<"Kbps");
     NS_LOG_UNCOND("Throughput = " <<iter->second.rxBytes * 8.0/((simulationTimeInSeconds+cleanupTime)*1000)<<"Kbps");
     NS_LOG_UNCOND(" ");
     SentPackets = SentPackets +(iter->second.txPackets);
     ReceivedPackets = ReceivedPackets + (iter->second.rxPackets);
     ReceivedBytes = ReceivedBytes + (iter->second.rxBytes);
-    LostPackets = LostPackets + (iter->second.lostPackets);
-    Delay = Delay + (iter->second.delaySum);
 
     j += 1;
   }
   
   AvgThroughput = ReceivedBytes*8.0 / ((simulationTimeInSeconds + cleanupTime)*1000);
-  // AvgThroughput = AvgThroughput/(2*nFlows);
   NS_LOG_UNCOND("\n--------Total Results of the simulation----------"<<std::endl);
   NS_LOG_UNCOND("Total sent packets  = " << SentPackets);
   NS_LOG_UNCOND("Total Received Packets = " << ReceivedPackets);
-  NS_LOG_UNCOND("Total Lost Packets = " << LostPackets);
   NS_LOG_UNCOND("METRICS >> ");
   NS_LOG_UNCOND("Average Throughput = " << AvgThroughput<< "Kbps");
-  if(ReceivedPackets != 0) NS_LOG_UNCOND("End to End Delay = " << Delay/ReceivedPackets);
   NS_LOG_UNCOND("Packet Delivery Ratio = " << ((ReceivedPackets*100.00)/SentPackets)<< "%");
-  NS_LOG_UNCOND("Packet Drop Ratio = " << ((LostPackets*100.00)/SentPackets)<< "%");
   NS_LOG_UNCOND("Total Flows " << j);
   NS_LOG_UNCOND("#######################################################################\n\n");
 
   // first x axes
   MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << coverageArea  << " ";
   // then y values
-  MyFile << AvgThroughput << " " << Delay/ReceivedPackets << " " << ((ReceivedPackets*100.00)/SentPackets) << " " << ((LostPackets*100.00)/SentPackets) <<std::endl;
+  MyFile << AvgThroughput << " " << ((ReceivedPackets*100.00)/SentPackets) <<std::endl;
 
   MyFile.close();
 
