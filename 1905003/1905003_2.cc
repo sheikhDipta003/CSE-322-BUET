@@ -1,7 +1,6 @@
 /*
-A single bottleneck dumbbell topology needs to be built in case of the static wireless network as shown in
-the figure where the middle connection needs to be a wired one with a lower data rate. The nodes in the left
-network are senders and the right ones are receivers.
+A single bottleneck dumbbell topology needs to be built in case of the mobile wireless network as shown in
+the figure. The nodes in the left network are senders and the right ones are receivers.
 
             s0----        -----r0
   senders - s1---ap0 --- ap1---r1 - receivers
@@ -11,7 +10,7 @@ The parameters that need to be varied in the simulations are:
 • Number of nodes: 20, 40, 60, 80, 100.
 • Number of flows: 10, 20, 30, 40, and 50(Not considering the Ack flows)
 • Number of packets per second: 100, 200, 300, 400, 500
-• Coverage area : 1/2/4/5 * Tx range.
+• Speed of nodes: 5 m/s, 10 m/s, 15 m/s, 20 m/s, 25 m/s
 
 In all cases, you need to measure the average of the following metrics and plot graphs :
 1. Network throughput : The amount of total bits received per second in a network.
@@ -19,7 +18,6 @@ In all cases, you need to measure the average of the following metrics and plot 
 
 Implementation guidelines:
 - Consider the packet size to be 1024 bytes.
-- For the coverage area, you may take the default value of Tx range to be 5.
 - The graphs need to be plotted for the average performance metrics of the varying parameters(such as
 flow VS throughput, speed VS Packet Delivery Ratio etc). 
 */
@@ -60,16 +58,15 @@ main(int argc, char *argv[])
 {
   uint32_t payloadSize = 1024;		//bytes
 
-  int tx_range = 5;
   std::string bottleNeckDelay = "2ms";
   std::string tcpVariant = "TcpNewReno"; /* TCP variant type. */
-  std::string file = "./scratch/assignment/part_1_wireless_high_static/plots/data.txt";
+  std::string file = "./scratch/1905003/plots/data.txt";
 
   // changes for part-1
   int nNodes = 20;
   int nFlows = 20;
   int nPacketsPerSecond = 500;
-  int coverageArea = 5;
+  int speed = 5;
 
   int simulationTimeInSeconds = 25;
   int cleanupTime = 2;
@@ -79,7 +76,7 @@ main(int argc, char *argv[])
   cmd.AddValue("nNodes","Number of total nodes", nNodes);
   cmd.AddValue("nFlows","Number of total flows", nFlows);
   cmd.AddValue("nPacketsPerSecond","Number of packets per second", nPacketsPerSecond);
-  cmd.AddValue("coverageArea","Static coverage area", coverageArea);
+  cmd.AddValue("speed","Speed of the mobile Station Nodes", speed);
 
   cmd.AddValue("file","File to store data", file);
   cmd.Parse(argc,argv);
@@ -87,11 +84,11 @@ main(int argc, char *argv[])
   nFlows = nFlows/2;
   int nLeaf = nNodes/2;
   int dataRate =(payloadSize * nPacketsPerSecond * 8) / 1000;		//kbps
-  coverageArea *= tx_range;
   std::string senderDataRate = std::to_string(dataRate) + "Kbps";
   std::string bottleNeckDataRate = std::to_string(dataRate / 10) + "Kbps";
 
-  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<2*nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; coverage area : "<<coverageArea<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
+  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<2*nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; "\
+                "speed : "<<speed<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
 
   // config some default values
   tcpVariant = std::string("ns3::") + tcpVariant;
@@ -100,7 +97,6 @@ main(int argc, char *argv[])
   NS_ABORT_MSG_UNLESS(TypeId::LookupByNameFailSafe(tcpVariant, &tcpTid), "TypeId " << tcpVariant << " not found");
   Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(TypeId::LookupByName(tcpVariant)));
   Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
-  Config::SetDefault("ns3::RangePropagationLossModel::MaxRange", DoubleValue(coverageArea));
 
   /////////////////////// SETUP NODES ///////////////////////
   // setup ap nodes 
@@ -181,12 +177,19 @@ main(int argc, char *argv[])
                                 "GridWidth", UintegerValue(3),
                                 "LayoutType", StringValue("RowFirst"));
   
-  // since the task is to construct wireless high-rate "static" network
-  mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-  // TODO : add coverage area 
+  // tell STA nodes how to move
+  mobility.SetMobilityModel("ns3::RandomWalk2dMobilityModel",
+                             "Bounds", RectangleValue(Rectangle(-50, 50, -50, 50)),
+                             "Speed", StringValue("ns3::ConstantRandomVariable[Constant="+std::to_string(speed)+"]"));
+  
+  // install on STA nodes
   mobility.Install(senderWifiStaNodes);
-  mobility.Install(senderWifiApNode);
   mobility.Install(receiverWifiStaNodes);
+
+  // tell AP node to stay still
+  mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+  // install on AP node
+  mobility.Install(senderWifiApNode);
   mobility.Install(receiverWifiApNode);
 
   // iterate our nodes and print their position.
@@ -281,7 +284,7 @@ main(int argc, char *argv[])
 
   int j=0;
   for(auto iter = stats.begin(); iter != stats.end(); ++iter) {
-    Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first);
+    Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first); 
     // classifier returns FiveTuple in correspondance to a flowID
 
     NS_LOG_UNCOND("----Flow ID:" <<iter->first);
@@ -307,7 +310,7 @@ main(int argc, char *argv[])
   NS_LOG_UNCOND("Total Flows " << j);
 
   // first x values
-  MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << coverageArea  << " ";
+  MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << speed  << " ";
   // then y values
   MyFile << AvgThroughput << " " <<((ReceivedPackets*100.00)/SentPackets) <<std::endl;
 

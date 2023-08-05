@@ -63,7 +63,7 @@ main(int argc, char *argv[])
   int tx_range = 5;
   std::string bottleNeckDelay = "2ms";
   std::string tcpVariant = "TcpNewReno"; /* TCP variant type. */
-  std::string file = "./scratch/assignment/part_1_wireless_high_static/plots/data.txt";
+  std::string file = "./scratch/1905003/plots/data.txt";
 
   // changes for part-1
   int nNodes = 20;

@@ -1,190 +1,25 @@
-[0/2] Re-checking globbed directories...
-ninja: no work to do.
-Using nodes : 20 ; flows : 20 ; packets per sec : 500 ; coverage area : 25 ; sender data rate : 4096Kbps ; bottleneck data rate : 409Kbps
-x=0, y=0, z=0
-x=1, y=0, z=0
-x=2, y=0, z=0
-x=0, y=1, z=0
-x=1, y=1, z=0
-x=2, y=1, z=0
-x=0, y=2, z=0
-x=1, y=2, z=0
-x=2, y=2, z=0
-x=0, y=3, z=0
-AP -> 
-x=1, y=3, z=0
-x=2, y=3, z=0
-x=0, y=4, z=0
-x=1, y=4, z=0
-x=2, y=4, z=0
-x=0, y=5, z=0
-x=1, y=5, z=0
-x=2, y=5, z=0
-x=0, y=6, z=0
-x=1, y=6, z=0
-x=2, y=6, z=0
-AP -> 
-x=0, y=7, z=0
-Connections : 
-0 <------> 0 : 10.1.2.2 : 10.1.3.2
-1 <------> 1 : 10.1.2.3 : 10.1.3.3
-2 <------> 2 : 10.1.2.4 : 10.1.3.4
-3 <------> 3 : 10.1.2.5 : 10.1.3.5
-4 <------> 4 : 10.1.2.6 : 10.1.3.6
-5 <------> 5 : 10.1.2.7 : 10.1.3.7
-6 <------> 6 : 10.1.2.8 : 10.1.3.8
-7 <------> 7 : 10.1.2.9 : 10.1.3.9
-8 <------> 8 : 10.1.2.10 : 10.1.3.10
-9 <------> 9 : 10.1.2.11 : 10.1.3.11
-----Flow ID:1
-Src Addr10.1.2.2 -- Dst Addr 10.1.3.2
-Sent Packets = 74
-Received Packets = 61
-Packet delivery ratio = 82.4324%
-Throughput = 18.8421Kbps
- 
-----Flow ID:2
-Src Addr10.1.2.3 -- Dst Addr 10.1.3.3
-Sent Packets = 85
-Received Packets = 64
-Packet delivery ratio = 75.2941%
-Throughput = 19.7985Kbps
- 
-----Flow ID:3
-Src Addr10.1.2.4 -- Dst Addr 10.1.3.4
-Sent Packets = 71
-Received Packets = 55
-Packet delivery ratio = 77.4648%
-Throughput = 16.9292Kbps
- 
-----Flow ID:4
-Src Addr10.1.2.5 -- Dst Addr 10.1.3.5
-Sent Packets = 286
-Received Packets = 216
-Packet delivery ratio = 75.5245%
-Throughput = 68.2584Kbps
- 
-----Flow ID:5
-Src Addr10.1.2.6 -- Dst Addr 10.1.3.6
-Sent Packets = 219
-Received Packets = 157
-Packet delivery ratio = 71.6895%
-Throughput = 49.4483Kbps
- 
-----Flow ID:6
-Src Addr10.1.2.7 -- Dst Addr 10.1.3.7
-Sent Packets = 223
-Received Packets = 165
-Packet delivery ratio = 73.991%
-Throughput = 51.9988Kbps
- 
-----Flow ID:7
-Src Addr10.1.2.8 -- Dst Addr 10.1.3.8
-Sent Packets = 119
-Received Packets = 96
-Packet delivery ratio = 80.6723%
-Throughput = 30.0006Kbps
- 
-----Flow ID:8
-Src Addr10.1.2.9 -- Dst Addr 10.1.3.9
-Sent Packets = 59
-Received Packets = 44
-Packet delivery ratio = 74.5763%
-Throughput = 13.4222Kbps
- 
-----Flow ID:9
-Src Addr10.1.2.10 -- Dst Addr 10.1.3.10
-Sent Packets = 225
-Received Packets = 168
-Packet delivery ratio = 74.6667%
-Throughput = 52.9553Kbps
- 
-----Flow ID:10
-Src Addr10.1.2.11 -- Dst Addr 10.1.3.11
-Sent Packets = 99
-Received Packets = 80
-Packet delivery ratio = 80.8081%
-Throughput = 24.8996Kbps
- 
-----Flow ID:11
-Src Addr10.1.3.10 -- Dst Addr 10.1.2.10
-Sent Packets = 162
-Received Packets = 162
-Packet delivery ratio = 100%
-Throughput = 2.87407Kbps
- 
-----Flow ID:12
-Src Addr10.1.3.11 -- Dst Addr 10.1.2.11
-Sent Packets = 65
-Received Packets = 65
-Packet delivery ratio = 100%
-Throughput = 1.14489Kbps
- 
-----Flow ID:13
-Src Addr10.1.3.8 -- Dst Addr 10.1.2.8
-Sent Packets = 81
-Received Packets = 81
-Packet delivery ratio = 100%
-Throughput = 1.33689Kbps
- 
-----Flow ID:14
-Src Addr10.1.3.5 -- Dst Addr 10.1.2.5
-Sent Packets = 185
-Received Packets = 184
-Packet delivery ratio = 99.4595%
-Throughput = 3.36711Kbps
- 
-----Flow ID:15
-Src Addr10.1.3.6 -- Dst Addr 10.1.2.6
-Sent Packets = 150
-Received Packets = 150
-Packet delivery ratio = 100%
-Throughput = 2.81244Kbps
- 
-----Flow ID:16
-Src Addr10.1.3.9 -- Dst Addr 10.1.2.9
-Sent Packets = 43
-Received Packets = 43
-Packet delivery ratio = 100%
-Throughput = 0.696889Kbps
- 
-----Flow ID:17
-Src Addr10.1.3.3 -- Dst Addr 10.1.2.3
-Sent Packets = 63
-Received Packets = 63
-Packet delivery ratio = 100%
-Throughput = 1.00741Kbps
- 
-----Flow ID:18
-Src Addr10.1.3.4 -- Dst Addr 10.1.2.4
-Sent Packets = 52
-Received Packets = 52
-Packet delivery ratio = 100%
-Throughput = 0.833185Kbps
- 
-----Flow ID:19
-Src Addr10.1.3.2 -- Dst Addr 10.1.2.2
-Sent Packets = 58
-Received Packets = 58
-Packet delivery ratio = 100%
-Throughput = 0.928Kbps
- 
-----Flow ID:20
-Src Addr10.1.3.7 -- Dst Addr 10.1.2.7
-Sent Packets = 145
-Received Packets = 145
-Packet delivery ratio = 100%
-Throughput = 2.77096Kbps
- 
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/genericpath.py", line 19, in exists
+    os.stat(path)
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/c/MinGW/bin/cmake3'
 
---------Total Results of the simulation----------
+During handling of the above exception, another exception occurred:
 
-Total sent packets  = 2464
-Total Received Packets = 2109
-METRICS >> 
-Average Throughput = 364.325Kbps
-Packet Delivery Ratio = 85.5925%
-Total Flows 20
-#######################################################################
-
-
+Traceback (most recent call last):
+  File "/mnt/c/Users/HP/Desktop/3-2-Lab/cse322-Networks/NS3/resources/ns-allinone-3.39/ns-3.39/./ns3", line 1615, in <module>
+    main()
+  File "/mnt/c/Users/HP/Desktop/3-2-Lab/cse322-Networks/NS3/resources/ns-allinone-3.39/ns-3.39/./ns3", line 1586, in main
+    build_step(args,
+  File "/mnt/c/Users/HP/Desktop/3-2-Lab/cse322-Networks/NS3/resources/ns-allinone-3.39/ns-3.39/./ns3", line 1096, in build_step
+    cmake_build(current_cmake_cache_folder,
+  File "/mnt/c/Users/HP/Desktop/3-2-Lab/cse322-Networks/NS3/resources/ns-allinone-3.39/ns-3.39/./ns3", line 866, in cmake_build
+    cmake, version = cmake_check_version()
+  File "/mnt/c/Users/HP/Desktop/3-2-Lab/cse322-Networks/NS3/resources/ns-allinone-3.39/ns-3.39/./ns3", line 851, in cmake_check_version
+    cmake3 = shutil.which("cmake3")
+  File "/usr/lib/python3.10/shutil.py", line 1507, in which
+    if _access_check(name, mode):
+  File "/usr/lib/python3.10/shutil.py", line 1427, in _access_check
+    return (os.path.exists(fn) and os.access(fn, mode)
+  File "/usr/lib/python3.10/genericpath.py", line 19, in exists
+    os.stat(path)
+KeyboardInterrupt
