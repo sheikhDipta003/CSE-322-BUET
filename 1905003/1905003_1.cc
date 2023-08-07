@@ -43,16 +43,24 @@ flow VS throughput, speed VS Packet Delivery Ratio etc).
 
 using namespace ns3;
 
-// print positions
-void getNodePos(NodeContainer container){
-  for(NodeContainer::Iterator j = container.Begin(); j != container.End(); j++)
-    {
-      Ptr<Node> object = *j;
-      Ptr<MobilityModel> pos = object->GetObject<MobilityModel>();
-      NS_ASSERT(pos != 0);
-      Vector vect = pos->GetPosition();
-      std::cout << "x=" << vect.x << ", y=" << vect.y << ", z=" << vect.z << std::endl;
-    }
+// variables for output measurement
+float AvgThroughput = 0;
+uint32_t SentPackets = 0;
+uint32_t ReceivedPackets = 0;
+uint32_t ReceivedBytes = 0;
+
+// calculate metrics
+void
+RxCount(Ptr< const Packet > packet, const Address &address)
+{
+  ReceivedPackets++;
+  ReceivedBytes += packet->GetSize();
+}
+
+void
+TxCount(Ptr< const Packet > packet)
+{
+  SentPackets++;
 }
 
 int
@@ -72,7 +80,6 @@ main(int argc, char *argv[])
   int coverageArea = 5;
 
   int simulationTimeInSeconds = 25;
-  int cleanupTime = 2;
 
   // input from CMD
   CommandLine cmd(__FILE__);
@@ -183,19 +190,11 @@ main(int argc, char *argv[])
   
   // since the task is to construct wireless high-rate "static" network
   mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
-  // TODO : add coverage area 
   mobility.Install(senderWifiStaNodes);
   mobility.Install(senderWifiApNode);
   mobility.Install(receiverWifiStaNodes);
   mobility.Install(receiverWifiApNode);
 
-  // iterate our nodes and print their position.
-  getNodePos(senderWifiStaNodes);
-  NS_LOG_UNCOND("AP -> ");
-  getNodePos(senderWifiApNode);
-  getNodePos(receiverWifiStaNodes);
-  NS_LOG_UNCOND("AP -> ");
-  getNodePos(receiverWifiApNode);
 
   /////////////////////// INSTALL STACK ///////////////////////
   InternetStackHelper stack1;
@@ -234,7 +233,9 @@ main(int argc, char *argv[])
     PacketSinkHelper packetSinkHelper("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), sp)); // 0.0.0.0 address 
     ApplicationContainer sinkApps = packetSinkHelper.Install(receiverWifiStaNodes.Get(receiver_no));
     sinkApps.Start(Seconds(0.));
-    sinkApps.Stop(Seconds(simulationTimeInSeconds + cleanupTime));
+    sinkApps.Stop(Seconds(simulationTimeInSeconds));
+    Ptr<PacketSink> sink = StaticCast<PacketSink>(sinkApps.Get(0));
+    sink->TraceConnectWithoutContext("Rx", MakeCallback(&RxCount));
 
     // setup source
     OnOffHelper sender_helper("ns3::TcpSocketFactory", (InetSocketAddress(receiverStaInterfaces.GetAddress(receiver_no), sp)));
@@ -245,6 +246,8 @@ main(int argc, char *argv[])
     ApplicationContainer senderApp = sender_helper.Install(senderWifiApNode.Get(0));
     senderApp.Start(Seconds(1.0));
     senderApp.Stop(Seconds(simulationTimeInSeconds));
+    Ptr<OnOffApplication> src = StaticCast<OnOffApplication>(senderApp.Get(0));
+    src->TraceConnectWithoutContext("Tx", MakeCallback(&TxCount));
 
     NS_LOG_UNCOND(sender_no<<" <------> "<<receiver_no << " : " <<senderStaInterfaces.GetAddress(sender_no)<<" : "<<receiverStaInterfaces.GetAddress(receiver_no));
 
@@ -258,53 +261,19 @@ main(int argc, char *argv[])
 
   Ipv4GlobalRoutingHelper::PopulateRoutingTables();
 
-  // install flow monitor
-  FlowMonitorHelper flowmon;
-  flowmon.SetMonitorAttribute("MaxPerHopDelay", TimeValue(Seconds(cleanupTime)));
-  Ptr<FlowMonitor> monitor = flowmon.InstallAll();
-
-  Simulator::Stop(Seconds(simulationTimeInSeconds + cleanupTime));
+  Simulator::Stop(Seconds(simulationTimeInSeconds));
   Simulator::Run();
 
-  // /////////////////////// FLOW MONITOR STATUS ///////////////////////
-
-  // variables for output measurement
-  float AvgThroughput = 0;
-  uint32_t SentPackets = 0;
-  uint32_t ReceivedPackets = 0;
-  uint32_t ReceivedBytes = 0;
-
-  std::ofstream MyFile(file, std::ios_base::app);
-
-  Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier>(flowmon.GetClassifier());
-  FlowMonitor::FlowStatsContainer stats = monitor->GetFlowStats();
-
-  int j=0;
-  for(auto iter = stats.begin(); iter != stats.end(); ++iter) {
-    Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first);
-    // classifier returns FiveTuple in correspondance to a flowID
-
-    NS_LOG_UNCOND("----Flow ID:" <<iter->first);
-    NS_LOG_UNCOND("Src Addr" <<t.sourceAddress << " -- Dst Addr "<< t.destinationAddress);
-    NS_LOG_UNCOND("Sent Packets = " <<iter->second.txPackets);
-    NS_LOG_UNCOND("Received Packets = " <<iter->second.rxPackets);
-    NS_LOG_UNCOND("Packet delivery ratio = " <<iter->second.rxPackets*100.0/iter->second.txPackets << "%");
-    NS_LOG_UNCOND("Throughput = " <<iter->second.rxBytes * 8.0/((simulationTimeInSeconds+cleanupTime)*1000)<<"Kbps");
-    NS_LOG_UNCOND(" ");
-    SentPackets = SentPackets +(iter->second.txPackets);
-    ReceivedPackets = ReceivedPackets +(iter->second.rxPackets);
-    ReceivedBytes = ReceivedBytes +(iter->second.rxBytes);
-
-    j += 1;
-  }
+  // /////////////////////// COLLECT AND STORE STATS ///////////////////////
   
-  AvgThroughput = ReceivedBytes*8.0 /((simulationTimeInSeconds + cleanupTime)*1000);
+  AvgThroughput = ReceivedBytes*8.0 /((Simulator::Now().GetSeconds())*1000);
   NS_LOG_UNCOND("\n--------Total Results of the simulation----------"<<std::endl);
   NS_LOG_UNCOND("Total sent packets  = " << SentPackets);
   NS_LOG_UNCOND("Total Received Packets = " << ReceivedPackets);
   NS_LOG_UNCOND("Average Throughput = " << AvgThroughput<< "Kbps");
   NS_LOG_UNCOND("Packet Delivery Ratio = " <<((ReceivedPackets*100.00)/SentPackets)<< "%");
-  NS_LOG_UNCOND("Total Flows " << j);
+  
+  std::ofstream MyFile(file, std::ios_base::app);
 
   // first x values
   MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << coverageArea  << " ";

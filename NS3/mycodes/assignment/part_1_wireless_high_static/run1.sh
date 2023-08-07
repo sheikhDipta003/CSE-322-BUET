@@ -1,7 +1,6 @@
 #!/bin/bash
 
 mkdir -p ./scratch/assignment/part_1_wireless_high_static/plots
-rm -f ./scratch/assignment/part_1_wireless_high_static/plots/log1.txt
 gnu_file=./scratch/assignment/results.gnuplot
 
 plot_all()
@@ -20,7 +19,7 @@ touch $file
 
 for i in $(seq 20 20 100) #inclusive
 do
-    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nNodes=${i} --nFlows=${i} --file=${file}" > ./scratch/assignment/part_1_wireless_high_static/plots/log1.txt 2>&1
+    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nNodes=${i} --nFlows=${i} --file=${file}"
     echo "Node : $i done"
 done
 
@@ -34,7 +33,7 @@ touch $file
 
 for i in $(seq 10 10 50) #inclusive
 do
-    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nFlows=${i} --file=${file}" > ./scratch/assignment/part_1_wireless_high_static/plots/log1.txt 2>&1
+    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nFlows=${i} --file=${file}"
     echo "Flow : $i done"
 done
 
@@ -48,7 +47,7 @@ touch $file
 
 for i in $(seq 100 100 500) #inclusive
 do
-    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nPacketsPerSecond=${i} --file=${file}" > ./scratch/assignment/part_1_wireless_high_static/plots/log1.txt 2>&1
+    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --nPacketsPerSecond=${i} --file=${file}"
     echo "Packets per s : $i done"
 done
 
@@ -62,7 +61,7 @@ touch $file
 
 for i in $(seq 1 1 5) #inclusive
 do
-    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --coverageArea=${i} --file=${file}" > ./scratch/assignment/part_1_wireless_high_static/plots/log1.txt 2>&1
+    ./ns3 run "scratch/assignment/part_1_wireless_high_static/wireless_high_static.cc --coverageArea=${i} --file=${file}"
     echo "Coverage Area : $i done"
 done
 
