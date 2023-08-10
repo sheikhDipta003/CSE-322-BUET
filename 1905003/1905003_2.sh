@@ -20,7 +20,7 @@ touch $file
 
 for i in $(seq 20 20 100) #inclusive
 do
-    ./ns3 run "scratch/1905003/1905003_2.cc --nNodes=${i} --nFlows=${i} --file=${file}"
+    ./ns3 run "scratch/1905003/1905003_2.cc --nNodes=${i} --nFlows=$((i/2)) --file=${file}"
     echo "Node : $i done"
 done
 

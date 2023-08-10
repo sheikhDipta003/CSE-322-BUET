@@ -69,9 +69,9 @@ main(int argc, char *argv[])
   std::string bottleNeckDelay = "2ms";
   std::string file = "./scratch/1905003/1905003_2/data.txt";
 
-  // changes for part-1
+  // changes for part-2
   int nNodes = 20;
-  int nFlows = 20;
+  int nFlows = 10;
   int nPacketsPerSecond = 500;
   int speed = 5;
 
@@ -87,14 +87,12 @@ main(int argc, char *argv[])
   cmd.AddValue("file","File to store data", file);
   cmd.Parse(argc,argv);
   
-  nFlows = nFlows/2;
   int nLeaf = nNodes/2;
   int dataRate =(payloadSize * nPacketsPerSecond * 8) / 1000;		//kbps
   std::string senderDataRate = std::to_string(dataRate) + "Kbps";
   std::string bottleNeckDataRate = std::to_string(dataRate / 10) + "Kbps";
 
-  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<2*nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; "\
-                "speed : "<<speed<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
+  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; speed : "<<speed<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
 
   // config some default values
   Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
@@ -272,7 +270,7 @@ main(int argc, char *argv[])
 
   std::ofstream MyFile(file, std::ios_base::app);
   // first x values
-  MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << speed  << " ";
+  MyFile << nNodes << " " << nFlows << " " << nPacketsPerSecond << " " << speed  << " ";
   // then y values
   MyFile << AvgThroughput << " " <<((ReceivedPackets*100.00)/SentPackets) <<std::endl;
 

@@ -74,7 +74,7 @@ main(int argc, char *argv[])
 
   // changes for part-1
   int nNodes = 20;
-  int nFlows = 20;
+  int nFlows = 10;
   int nPacketsPerSecond = 500;
   int coverageArea = 5;
 
@@ -90,15 +90,13 @@ main(int argc, char *argv[])
   cmd.AddValue("file","File to store data", file);
   cmd.Parse(argc,argv);
   
-  nFlows = nFlows/2;
   int nLeaf = nNodes/2;
   int dataRate =(payloadSize * nPacketsPerSecond * 8) / 1000;		//kbps
   coverageArea *= tx_range;
   std::string senderDataRate = std::to_string(dataRate) + "Kbps";
   std::string bottleNeckDataRate = std::to_string(dataRate / 10) + "Kbps";
-  // std::string bottleNeckDataRate = "1Mbps";
 
-  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<2*nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; coverage area : "<<coverageArea<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
+  NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; coverage area : "<<coverageArea<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
 
   // config some default values
   Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
@@ -271,7 +269,7 @@ main(int argc, char *argv[])
   std::ofstream MyFile(file, std::ios_base::app);
 
   // first x values
-  MyFile << nNodes << " " << 2*nFlows << " " << nPacketsPerSecond << " " << coverageArea  << " ";
+  MyFile << nNodes << " " << nFlows << " " << nPacketsPerSecond << " " << coverageArea  << " ";
   // then y values
   MyFile << AvgThroughput << " " <<((ReceivedPackets*100.00)/SentPackets) <<std::endl;
 
