@@ -67,7 +67,6 @@ main(int argc, char *argv[])
   uint32_t payloadSize = 1024;		//bytes
 
   std::string bottleNeckDelay = "2ms";
-  std::string tcpVariant = "TcpNewReno"; /* TCP variant type. */
   std::string file = "./scratch/assignment/part_2_wireless_high_mobile/plots/data.txt";
 
   // changes for part-1
@@ -98,11 +97,6 @@ main(int argc, char *argv[])
                 "speed : "<<speed<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
 
   // config some default values
-  tcpVariant = std::string("ns3::") + tcpVariant;
-  // Select TCP variant
-  TypeId tcpTid;
-  NS_ABORT_MSG_UNLESS(TypeId::LookupByNameFailSafe(tcpVariant, &tcpTid), "TypeId " << tcpVariant << " not found");
-  Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(TypeId::LookupByName(tcpVariant)));
   Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
 
   /////////////////////// SETUP NODES ///////////////////////

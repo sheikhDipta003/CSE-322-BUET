@@ -70,7 +70,6 @@ main(int argc, char *argv[])
 
   int tx_range = 5;
   std::string bottleNeckDelay = "2ms";
-  std::string tcpVariant = "TcpNewReno"; /* TCP variant type. */
   std::string file = "./scratch/assignment/part_1_wireless_high_static/plots/data.txt";
 
   // changes for part-1
@@ -97,15 +96,11 @@ main(int argc, char *argv[])
   coverageArea *= tx_range;
   std::string senderDataRate = std::to_string(dataRate) + "Kbps";
   std::string bottleNeckDataRate = std::to_string(dataRate / 10) + "Kbps";
+  // std::string bottleNeckDataRate = "1Mbps";
 
   NS_LOG_UNCOND("Using nodes : "<<nNodes<<" ; flows : "<<2*nFlows<<" ; packets per sec : "<<nPacketsPerSecond<<" ; coverage area : "<<coverageArea<<" ; sender data rate : "<<senderDataRate<<" ; bottleneck data rate : "<<bottleNeckDataRate);
 
   // config some default values
-  tcpVariant = std::string("ns3::") + tcpVariant;
-  // Select TCP variant
-  TypeId tcpTid;
-  NS_ABORT_MSG_UNLESS(TypeId::LookupByNameFailSafe(tcpVariant, &tcpTid), "TypeId " << tcpVariant << " not found");
-  Config::SetDefault("ns3::TcpL4Protocol::SocketType", TypeIdValue(TypeId::LookupByName(tcpVariant)));
   Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
   Config::SetDefault("ns3::RangePropagationLossModel::MaxRange", DoubleValue(coverageArea));
 
@@ -179,13 +174,14 @@ main(int argc, char *argv[])
 
   //setup mobility model
   MobilityHelper mobility;
-
+  double dx = 5.0, dy = 5.0;
+  int gridCols = static_cast<int>(coverageArea / dx) + 1;
   mobility.SetPositionAllocator("ns3::GridPositionAllocator",
                                 "MinX", DoubleValue(0.0),
                                 "MinY", DoubleValue(0.0),
-                                "DeltaX", DoubleValue(1.0),
-                                "DeltaY", DoubleValue(1.0),
-                                "GridWidth", UintegerValue(3),
+                                "DeltaX", DoubleValue(dx),
+                                "DeltaY", DoubleValue(dy),
+                                "GridWidth", UintegerValue(gridCols),
                                 "LayoutType", StringValue("RowFirst"));
   
   // since the task is to construct wireless high-rate "static" network
@@ -194,7 +190,6 @@ main(int argc, char *argv[])
   mobility.Install(senderWifiApNode);
   mobility.Install(receiverWifiStaNodes);
   mobility.Install(receiverWifiApNode);
-
 
   /////////////////////// INSTALL STACK ///////////////////////
   InternetStackHelper stack1;

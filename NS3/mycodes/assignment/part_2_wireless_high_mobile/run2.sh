@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf ./scratch/assignment/part_2_wireless_high_mobile/plots
 mkdir -p ./scratch/assignment/part_2_wireless_high_mobile/plots
 gnu_file=./scratch/assignment/results.gnuplot
 

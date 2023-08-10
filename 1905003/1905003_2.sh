@@ -1,7 +1,8 @@
 #!/bin/bash
 
-mkdir -p ./scratch/1905003/plots
-gnu_file=./scratch/1905003/results.gnuplot
+rm -rf ./scratch/1905003/1905003_2
+mkdir -p ./scratch/1905003/1905003_2
+gnu_file=./scratch/1905003/1905003.gnuplot
 
 plot_all()
 {
@@ -13,7 +14,7 @@ plot_all()
 
 
 # vary no of nodes
-file=./scratch/1905003/plots/data_nodes.txt
+file=./scratch/1905003/1905003_2/data_nodes.txt
 rm -f $file
 touch $file
 
@@ -23,11 +24,11 @@ do
     echo "Node : $i done"
 done
 
-plot_all "./scratch/1905003/plots" "nodes" $file 1
+plot_all "./scratch/1905003/1905003_2" "nodes" $file 1
 
 
 # vary no of flows
-file=./scratch/1905003/plots/data_flow.txt
+file=./scratch/1905003/1905003_2/data_flow.txt
 rm -f $file
 touch $file
 
@@ -37,11 +38,11 @@ do
     echo "Flow : $i done"
 done
 
-plot_all "./scratch/1905003/plots" "flow" $file 2
+plot_all "./scratch/1905003/1905003_2" "flow" $file 2
 
 
 # vary no of packets per second
-file=./scratch/1905003/plots/data_pps.txt
+file=./scratch/1905003/1905003_2/data_pps.txt
 rm -f $file
 touch $file
 
@@ -51,11 +52,11 @@ do
     echo "Packets per s : $i done"
 done
 
-plot_all "./scratch/1905003/plots" "packets per second" $file 3
+plot_all "./scratch/1905003/1905003_2" "packets per second" $file 3
 
 
 # vary speed
-file=./scratch/1905003/plots/data_speed.txt
+file=./scratch/1905003/1905003_2/data_speed.txt
 rm -f $file
 touch $file
 
@@ -65,4 +66,4 @@ do
     echo "Speed : $i done"
 done
 
-plot_all "./scratch/1905003/plots" "speed" $file 4
+plot_all "./scratch/1905003/1905003_2" "speed" $file 4
