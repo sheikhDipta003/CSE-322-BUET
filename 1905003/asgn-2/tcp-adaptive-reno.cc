@@ -1,6 +1,4 @@
 #include "tcp-adaptive-reno.h"
-// #include "rtt-estimator.h"
-// #include "tcp-socket-base.h"
 
 NS_LOG_COMPONENT_DEFINE("TcpAdaptiveReno");
 
@@ -86,8 +84,7 @@ TcpAdaptiveReno::GetSsThresh(Ptr<const TcpSocketState> tcb, uint32_t bytesInFlig
 }
 
 void
-TcpAdaptiveReno::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packetsAcked,
-                        const Time& rtt)
+TcpAdaptiveReno::PktsAcked(Ptr<TcpSocketState> tcb, uint32_t packetsAcked, const Time& rtt)
 {
   NS_LOG_FUNCTION(this << tcb << packetsAcked << rtt);
 
@@ -126,7 +123,7 @@ TcpAdaptiveReno::EstimateCongestionLevel()
   */
 
   float a = 0.85;
-  if(m_rtt_j1_conj < m_rtt_min) a = 0;
+  if(m_rtt_j1_conj < m_rtt_min) a = 0.0;    //initially, a = 0
   
   double conjRtt = a * m_rtt_j1_conj.GetSeconds() +(1-a) * m_rtt_j_loss.GetSeconds();
 

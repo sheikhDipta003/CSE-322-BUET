@@ -50,7 +50,6 @@ private:
   void EstimateIncWnd(Ptr<TcpSocketState> tcb);
 
 protected:
-  // void EstimateBW (const Time& rtt, Ptr<TcpSocketState> tcb);
   void CongestionAvoidance (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked) override;
 
   Time                   m_rtt_min;               //!< Minimum RTT
