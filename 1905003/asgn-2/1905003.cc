@@ -11,7 +11,6 @@
 #include "ns3/stats-module.h"
 #include "ns3/callback.h"
 #include "ns3/flow-monitor-module.h"
-#include "ns3/csma-module.h"
 
 using namespace ns3;
 
@@ -142,8 +141,8 @@ CwndChange(Ptr<OutputStreamWrapper> stream, uint32_t oldCwnd, uint32_t newCwnd)
 
 int main(int argc, char *argv[]){
     uint32_t payloadSize = 1472;
-    std::string tcp1 = "ns3::TcpNewReno"; // TcpNewReno
-    std::string tcp2 = "ns3::TcpHighSpeed"; //TcpAdaptiveReno, TcpWestwoodPlus, TcpHighSpeed
+    std::string tcp1 = "ns3::TcpNewReno";
+    std::string tcp2 = "ns3::TcpHighSpeed";
     std::string senderDataRate = "1Gbps";
     std::string senderDelay = "1ms";
     int bttlnkRate = 50;
@@ -153,7 +152,6 @@ int main(int argc, char *argv[]){
     int pcktLossExp = 6;
     int flag = 1;
 
-    // input from CMD
     CommandLine cmd(__FILE__);
     cmd.AddValue("tcp2","Name of TCP variant 2", tcp2);
     cmd.AddValue("bttlnkRate","Datarate of the bottlelink", bttlnkRate);
@@ -167,8 +165,6 @@ int main(int argc, char *argv[]){
     std::string bottleNeckDataRate = std::to_string(bttlnkRate) + "Mbps";
     std::string bottleNeckDelay = std::to_string(bttlnkDelay) + "ms";
 
-    NS_LOG_UNCOND("USING TCP 1 = "<< tcp1 <<" ; TCP 2 = "<< tcp2<< " ; bottleneck rate = "<< bottleNeckDataRate <<" ; packet loss rate = "<< packet_loss_rate);
-
     Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(payloadSize));
 
     // setup nodes, devices and channels
@@ -181,7 +177,7 @@ int main(int argc, char *argv[]){
     p2pLeaf.SetChannelAttribute("Delay", StringValue(senderDelay));
 
     // add 'router buffer capacity' equal to 'bandwidth-delay product'
-    p2pLeaf.SetQueue("ns3::DropTailQueue", "MaxSize", StringValue(std::to_string(bttlnkDelay * bttlnkRate) + "p"));
+    p2pLeaf.SetQueue("ns3::DropTailQueue", "MaxSize", StringValue(std::to_string((bttlnkDelay * bttlnkRate)/(payloadSize * 8)) + "p"));
 
     PointToPointDumbbellHelper p2pDumbbell(2, p2pLeaf, 2, p2pLeaf, p2pBottleneck);
 
