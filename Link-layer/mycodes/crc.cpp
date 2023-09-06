@@ -69,7 +69,7 @@ string mod2div(string dividend, string divisor)
 // Function used at the sender side to encode
 // data by appending remainder of modular division
 // at the end of data.
-string encodeData(string data, string key)
+pair<string,string> encodeData(string data, string key)
 {
 	int l_key = key.length();
 
@@ -80,19 +80,17 @@ string encodeData(string data, string key)
 	string remainder = mod2div(appended_data, key);
 
 	// Append remainder in the original data
-	string codeword = data + remainder;
-	return codeword;
+	// string codeword = data + remainder;
 	// cout << "Remainder : " << remainder << "\n";
-	// cout << "Encoded Data (Data + Remainder) :" << codeword
-	// 	<< "\n";
+	// cout << "Encoded Data (Data + Remainder) :" << codeword << "\n";
+	return pair<string,string>(data,remainder);
 }
 // checking if the message received by receiver is correct
 // or not. If the remainder is all 0 then it is correct,
 // else wrong.
-void receiver(string data, string key)
+string receiver(string data, string key)
 {
-	string currxor
-		= mod2div(data.substr(0, key.size()), key);
+	string currxor = mod2div(data.substr(0, key.size()), key);
 	int curr = key.size();
 	while (curr != data.size()) {
 		if (currxor.size() != key.size()) {
@@ -106,11 +104,10 @@ void receiver(string data, string key)
 		currxor = mod2div(currxor, key);
 	}
 	if (currxor.find('1') != string::npos) {
-		cout << "there is some error in data" << endl;
+		return "error detected";
 	}
-	else {
-		cout << "correct message received" << endl;
-	}
+	
+	return "no error detected";
 }
 // Driver code
 // int main()
@@ -121,7 +118,7 @@ void receiver(string data, string key)
 // 	encodeData(data, key);
 
 // 	cout << "\nReceiver side..." << endl;
-// 	receiver(data+mod2div(data+std::string(key.size() - 1, '0'),key), key);
+// 	cout << receiver(data+mod2div(data+std::string(key.size() - 1, '0'),key), key);
 
 // 	return 0;
 // }
